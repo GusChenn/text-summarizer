@@ -1,17 +1,34 @@
 from flask import Flask, request
 import spacy
-from spacy.lang.pt.stop_words import STOP_WORDS
+from spacy.lang.pt.stop_words import STOP_WORDS as PT_STOP_WORDS
+from spacy.lang.en.stop_words import STOP_WORDS as EN_STOP_WORDS
 from string import punctuation
 from heapq import nlargest
+from typing import TypedDict
 
 
-def summarize(text, per):
-    nlp = spacy.load("pt_core_news_md")
+class RequestBody(TypedDict):
+    text: str
+    per: float
+    language: str
+
+
+def summarize(text: str, per: float, language: str) -> str:
+    if language not in ["pt", "en"]:
+        return "Select a valid language (pt or en)"
+
+    if language == "pt":
+        model = "pt_core_news_md"
+        stop_words = PT_STOP_WORDS
+    else:
+        model = "en_core_web_sm"
+        stop_words = EN_STOP_WORDS
+
+    nlp = spacy.load(model)
     doc = nlp(text)
-    tokens = [token.text for token in doc]
     word_frequencies = {}
     for word in doc:
-        if word.text.lower() not in list(STOP_WORDS):
+        if word.text.lower() not in list(stop_words):
             if word.text.lower() not in punctuation:
                 if word.text not in word_frequencies.keys():
                     word_frequencies[word.text] = 1
@@ -42,15 +59,17 @@ app = Flask(__name__)
 
 
 @app.get("/summarize")
-def fils_programming_languages():
-    args = request.args
-    text = args.get("text", default="", type=str)
-    per = args.get("per", default=1, type=float)
+def generate_summary() -> dict[str, str]:
+    args: RequestBody = request.json
 
-    if not text or not per:
-        return {"error": "There was a problem processing your request"}
+    try:
+        text = args["text"]
+        per = float(args["per"])
+        language = args["language"]
+    except KeyError:
+        return {"error": "Missing information in the request body"}
 
-    return {"programming_languages": summarize(text=text, per=per)}
+    return {"summary": summarize(text=text, per=per, language=language)}
 
 
 if __name__ == "__main__":
