@@ -1,10 +1,11 @@
-from flask import Flask, request
 import spacy
+from flask import Flask, request
 from spacy.lang.pt.stop_words import STOP_WORDS as PT_STOP_WORDS
 from spacy.lang.en.stop_words import STOP_WORDS as EN_STOP_WORDS
 from string import punctuation
 from heapq import nlargest
 from typing import TypedDict
+from flask_cors import CORS, cross_origin
 
 
 class RequestBody(TypedDict):
@@ -58,7 +59,8 @@ def summarize(text: str, per: float, language: str) -> str:
 app = Flask(__name__)
 
 
-@app.get("/summarize")
+@app.post("/summarize")
+@cross_origin(origin="*", headers=["Content-Type", "Authorization"])
 def generate_summary() -> dict[str, str]:
     args: RequestBody = request.json
 
