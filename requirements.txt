@@ -19,7 +19,6 @@ packaging==23.1
 pathy==0.10.1
 preshed==3.0.8
 pt-core-news-md @ https://github.com/explosion/spacy-models/releases/download/pt_core_news_md-3.5.0/pt_core_news_md-3.5.0-py3-none-any.whl#sha256=660d4a2ee1ccc513f96711245e4bdf816a6ac85121296038587f67a9ad32f17e
-pt-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-3.5.0/pt_core_news_sm-3.5.0-py3-none-any.whl#sha256=1513c9f3d3f2aad6750c109ad36ddb38d57e20ebf26b903999fc8f6f86a230f3
 pydantic==1.10.7
 requests==2.30.0
 smart-open==6.3.0
