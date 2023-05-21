@@ -5,7 +5,7 @@ from spacy.lang.en.stop_words import STOP_WORDS as EN_STOP_WORDS
 from string import punctuation
 from heapq import nlargest
 from typing import TypedDict
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
 
 
 class RequestBody(TypedDict):
