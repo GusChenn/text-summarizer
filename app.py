@@ -51,3 +51,9 @@ def fils_programming_languages():
         return {"error": "There was a problem processing your request"}
 
     return {"programming_languages": summarize(text=text, per=per)}
+
+
+if __name__ == "__main__":
+    from waitress import serve
+
+    serve(app, host="0.0.0.0", port=5000)
